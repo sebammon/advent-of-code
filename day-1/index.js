@@ -1,8 +1,6 @@
-const fs = require('fs');
+const {readFile} = require("../utils");
 
-const data = fs.readFileSync('input.txt', 'utf8');
-
-const values = data.split('\n').map(Number);
+const values = readFile().map(Number);
 
 let count = 0;
 for (let i = 1; i < values.length; i++) {
