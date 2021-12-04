@@ -8,7 +8,7 @@ const boards = readFile('boards.txt').reduce((acc, curr, index) => {
         acc[boardCount] = [acc[boardCount], Array(acc[boardCount].length).fill(0)]
         boardCount++
     } else {
-        const row = curr.replace(/ +/g, ' ').split(' ').map(Number)
+        const row = curr.split(' ').filter(v => v !== '').map(Number)
 
         if (acc[boardCount]) {
             acc[boardCount] = [...acc[boardCount], ...row]
@@ -39,13 +39,16 @@ function isWinningBoard(mask) {
 
 let foundLastWinningBoard;
 let lastNumber;
-let remainingBoards = boards;
+let hasWonIndex = new Set();
 for (let i = 0; i < randomNumbers.length; i++) {
     const randomNumber = randomNumbers[i];
-    const thisRoundWinningBoards = new Set();
 
-    for (let j = 0; j < remainingBoards.length; j++) {
-        const [board, mask] = remainingBoards[j]
+    for (let j = 0; j < boards.length; j++) {
+        if (hasWonIndex.has(j)) {
+            continue
+        }
+
+        const [board, mask] = boards[j]
         const index = board.indexOf(randomNumber)
 
         if (index !== -1) {
@@ -53,17 +56,10 @@ for (let i = 0; i < randomNumbers.length; i++) {
         }
 
         if (isWinningBoard(mask)) {
-            thisRoundWinningBoards.add(j)
+            hasWonIndex.add(j)
+            lastNumber = randomNumber;
+            foundLastWinningBoard = [board, mask];
         }
-    }
-
-    remainingBoards = remainingBoards.filter((_, idx) => !thisRoundWinningBoards.has(idx))
-
-    if (remainingBoards.length === 1) {
-        lastNumber = randomNumber;
-        const [board, mask] = remainingBoards[0];
-        foundLastWinningBoard = [board, mask];
-        break;
     }
 }
 

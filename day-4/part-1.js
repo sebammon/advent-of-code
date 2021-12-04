@@ -8,7 +8,7 @@ const boards = readFile('boards.txt').reduce((acc, curr, index) => {
         acc[boardCount] = [acc[boardCount], Array(acc[boardCount].length).fill(0)]
         boardCount++
     } else {
-        const row = curr.replace(/ +/g, ' ').split(' ').map(Number)
+        const row = curr.split(' ').filter(v => v !== '').map(Number)
 
         if (acc[boardCount]) {
             acc[boardCount] = [...acc[boardCount], ...row]
