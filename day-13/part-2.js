@@ -46,5 +46,5 @@ for (let point of pointSet) {
 }
 
 output.forEach(row => {
-    console.log(row.join(''))
+    console.log(row.join('  '))
 })
